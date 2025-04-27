@@ -5,6 +5,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { THEME } from "../themes/theme";
 
 export default function RootLayout() {
+  
   const theme: ThemeProp = THEME 
   return (
       <PaperProvider theme={DefaultTheme}>

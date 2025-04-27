@@ -16,3 +16,4 @@ export const SAMPLE: Exercise[] = [
   { text: "30 Minute Run, 2 miles", workUnit:"miles", exercise:"Run", work:2, timeStamp: new Date()},
   { text: "5x10 Burpees", work: 10, sets: 5, workUnit: "repetitions", exercise:"Burpees", timeStamp: new Date()}
 ]
+
