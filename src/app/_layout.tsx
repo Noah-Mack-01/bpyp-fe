@@ -7,7 +7,7 @@ import { THEME } from "../themes/theme";
 export default function RootLayout() {
   const theme: ThemeProp = THEME 
   return (
-      <PaperProvider theme={theme}>
+      <PaperProvider theme={DefaultTheme}>
         <Stack screenOptions={{ headerShown: false}}/>
       </PaperProvider>
   );
