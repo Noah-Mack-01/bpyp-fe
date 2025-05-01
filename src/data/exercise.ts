@@ -1,12 +1,14 @@
 export type Exercise = {
-  text: string,
+  text?: string,
   exercise?: string,
   sets?: number,
   work?: number,
   workUnit?: string
   resistance?: number,
   resistanceUnits?: string
-  timeStamp: Date
+  duration?: string,
+  durationUnits?: string,
+  timeStamp?: Date
   attributes?: string[]
 }
 

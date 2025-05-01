@@ -3,7 +3,7 @@ import axios from "axios";
 import { Exercise } from "../data/exercise";
 
 interface DataProviderProps {
-  id: number;
+  id: string;
   children: React.ReactNode;
 }
 
