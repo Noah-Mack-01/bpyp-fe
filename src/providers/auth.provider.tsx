@@ -4,7 +4,19 @@ import * as SecureStore from 'expo-secure-store'; // For Expo apps
 // OR import { Keychain } from 'react-native-keychain'; // For non-Expo apps
 import authAPI from '../api/auth';
 
-const AuthContext = createContext(null as any | null);
+type AuthenticationContext = {
+    user: any,
+    isLoading: boolean,
+    isAuthenticated: boolean, 
+    login: (creds: any) => Promise<boolean>,
+    register: (creds: any) => Promise<boolean>,
+    logout: ()=> Promise<void>,
+    refreshToken: (token: any) => Promise<boolean>,
+    getAccessToken: () => Promise<any> 
+}
+
+
+const AuthContext = createContext(null as AuthenticationContext | null);
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState(null) as any | null;
@@ -126,7 +138,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   // Value object to be provided to consumers
-  const authContextValue = {
+  const authContextValue: AuthenticationContext = {
     user,
     isLoading,
     isAuthenticated: !!user,

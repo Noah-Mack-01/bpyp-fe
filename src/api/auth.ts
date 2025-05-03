@@ -1,9 +1,9 @@
 // src/api/auth.js
 import axios from 'axios';
-import Config from '../config';
+import { config } from '../config';
 
 const apiClient = axios.create({
-  baseURL: Config.API_URL,
+  baseURL: config.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -47,26 +47,26 @@ apiClient.interceptors.response.use(
 );
 
 const authAPI = {
-  login: async (credentials) => {
+  login: async (credentials: any) => {
     const response = await apiClient.post('/auth/login', credentials);
     return response.data;
   },
   
-  register: async (userData) => {
+  register: async (userData: any) => {
     const response = await apiClient.post('/auth/register', userData);
     return response.data;
   },
   
-  logout: async (token) => {
+  logout: async (token: any) => {
     return await apiClient.post('/auth/logout');
   },
   
-  refreshToken: async (refreshToken) => {
+  refreshToken: async (refreshToken: any) => {
     const response = await apiClient.post('/auth/refresh', { refreshToken });
     return response.data;
   },
   
-  getUserProfile: async (token) => {
+  getUserProfile: async (token: any) => {
     const response = await apiClient.get('/users/profile');
     return response.data;
   },

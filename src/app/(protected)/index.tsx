@@ -1,13 +1,11 @@
 import React, { ReactNode, useState } from "react";
-import {Formik} from "formik";
 import { ScrollView, Touchable, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { TextInput, Text, Appbar, useTheme, Icon, List, Divider} from "react-native-paper"
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
-import { ExerciseGrid } from "../components/exercise/exercise-grid";
-import { Link, Redirect, useNavigation, useRouter } from "expo-router";
-import { ExerciseForm } from "../components/exercise/exercise-form";
-import AnimatedAccordion, { ListChild } from "../components/shared/lists";
-import { exerciseToListItem, SAMPLE } from "../data/exercise";
+import { useRouter } from "expo-router";
+import { ExerciseForm } from "../../components/exercise/exercise-form";
+import AnimatedAccordion, { ListChild } from "../../components/shared/lists";
+import { exerciseToListItem, SAMPLE } from "../../data/exercise";
 export default function Index() {
   const[text, setText] = useState("");
   const[editing, setEditing]=useState(false);

@@ -1,1 +1,3 @@
-export const Config = {} as any;
+export const config = {
+  API_URL: "http://localhost:8080"
+} as any;
