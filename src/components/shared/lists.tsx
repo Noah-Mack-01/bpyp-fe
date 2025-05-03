@@ -60,7 +60,7 @@ export function ListChild<T>(props: { object: T, func: (t: T) => ListProperties 
       style={{ width: "100%" }}
       title={<Text numberOfLines={1} style={{ flexShrink: 1 }}>{properties.title}</Text>}
       description={properties.description}
-      onPress={onClick}
+      onPress={onClick??undefined}
       left={(style) => (
         <List.Icon
           style={{ ...style.style }}
