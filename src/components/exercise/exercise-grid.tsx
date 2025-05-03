@@ -24,7 +24,7 @@ function ExerciseHeaderRow() { return (
 )}
 function TimestampedRows(props: { exercise: Exercise[]}) {
   return (props.exercise.map(exercise => 
-    <DataTable.Row key={exercise.text+exercise.timeStamp.toISOString()} children={mapExerciseToNode(exercise)}/>
+    <DataTable.Row key={exercise.text+(exercise?.timeStamp?.toISOString() ?? "")} children={mapExerciseToNode(exercise)}/>
   ));
 }
 
@@ -35,7 +35,7 @@ function mapExerciseToNode(exercise: Exercise): ReactNode {
     {exercise.sets ? <DataTable.Cell >{exercise.sets}</DataTable.Cell>:<PlaceHolder/>}
     {exercise.work ? <DataTable.Cell >{[exercise.work, exercise.workUnit].join(" ")}</DataTable.Cell>:<PlaceHolder/>}
     {exercise.resistance ? <DataTable.Cell >{[exercise.resistance, exercise.resistanceUnits].join(" ")}</DataTable.Cell>:<PlaceHolder />}
-    <DataTable.Cell >{exercise.timeStamp.toLocaleTimeString()}</DataTable.Cell>
+    <DataTable.Cell >{exercise?.timeStamp?.toLocaleTimeString() ?? "N/A"}</DataTable.Cell>
   </DataTable.Row>)
 }
 

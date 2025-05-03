@@ -16,7 +16,11 @@ const ExerciseSchema = Yup.object().shape({
   resistance: Yup.number().min(0, 'Must be at least 0'),
 });
 
-export const ExerciseForm = (props: { exercise?: Exercise, back?: ()=>void }) => {
+export const ExerciseForm = (props: { 
+  exercise?: Exercise, 
+  back?: ()=>void, 
+  submit?:(exercise: Exercise)=>Promise<void>
+}) => {
   const dimensions = useWindowDimensions()
   const inputStyle = dimensions.height < dimensions.width ? {} as any : {width: Math.min(dimensions.width, 300)}
   return (
@@ -34,14 +38,22 @@ export const ExerciseForm = (props: { exercise?: Exercise, back?: ()=>void }) =>
       } as Exercise}
       validationSchema={ExerciseSchema}
       onSubmit={(values, actions) => {
-        setTimeout(() => {
+        if (props.submit) {
+          props.submit(values).then(()=>{
+            actions.setSubmitting(false);
+            actions.setTouched({});
+          });
+        }
+        else setTimeout(() => {
+          alert("No endpoint submission logic specified!");
           alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
+          actions.setSubmitting(false); 
         }, 1000);
-      }}
-    >
+      }}>
       {({ handleChange, handleBlur, handleSubmit, handleReset, values, errors, touched, isSubmitting }) => (
-        <RowToColumnView style={{width: "100%", gap:10}}>
+        <View style={{}}>
+        <RowToColumnView style={{width: "100%", gap:10, alignItems:"flex-start", minHeight:100}}>
+          <View>
           <TextInput 
             style={inputStyle} 
             mode="outlined" 
@@ -49,11 +61,11 @@ export const ExerciseForm = (props: { exercise?: Exercise, back?: ()=>void }) =>
             value={values.exercise}
             onChangeText={handleChange('exercise')}
             onBlur={handleBlur('exercise')}
-            error={touched.exercise && Boolean(errors.exercise)}
-          />
+            error={touched.exercise && Boolean(errors.exercise)}/>
           {touched.exercise && errors.exercise && (
-            <View><HelperText type="error" visible>{errors.exercise}</HelperText></View>
+            <HelperText type="error" visible>{errors.exercise}</HelperText>
           )}
+          </View>
           
           <TextInput 
             style={inputStyle} 
@@ -121,9 +133,9 @@ export const ExerciseForm = (props: { exercise?: Exercise, back?: ()=>void }) =>
                 handleChange('durationUnit')(value);
               }}
             />
-          )}
-          
-          <View style={{ minWidth: Math.min(dimensions.width > dimensions.height ? 350 : 300, dimensions.width), flexDirection: "row", justifyContent:"center", gap: 10}}>
+          )}        
+          </RowToColumnView>
+          <View style={{ minWidth: Math.min(dimensions.width > dimensions.height ? 350 : 300, dimensions.width), maxWidth:Math.min(dimensions.width > dimensions.height ? 350 : 300, dimensions.width), flexDirection: "row", justifyContent:"center", gap: 10}}>
             {props.back && <Button style={{flex:1}} icon="arrow-left" onPress={props.back} mode="contained-tonal">Back</Button>}
             <Button 
               style={{flex:1}} 
@@ -142,8 +154,7 @@ export const ExerciseForm = (props: { exercise?: Exercise, back?: ()=>void }) =>
             >
               Reset
             </Button>
-          </View>
-        </RowToColumnView>
+          </View></View>
       )}
     </Formik>
   );

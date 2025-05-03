@@ -6,6 +6,8 @@ import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import { ExerciseGrid } from "../components/exercise/exercise-grid";
 import { Link, Redirect, useNavigation, useRouter } from "expo-router";
 import { ExerciseForm } from "../components/exercise/exercise-form";
+import AnimatedAccordion, { ListChild } from "../components/shared/lists";
+import { exerciseToListItem, SAMPLE } from "../data/exercise";
 export default function Index() {
   const[text, setText] = useState("");
   const[editing, setEditing]=useState(false);
@@ -16,36 +18,22 @@ export default function Index() {
   <ScrollView style={{width: "98%", marginHorizontal: "1%", paddingTop:"1%"}}>
     {editing ? <ExerciseForm back={()=>{setEditing(false)}}/> : 
     smartInput(text, setText, theme, scale.width < scale.height ? ()=>{
-      router.push("/exercise/")
+      router.push(`/exercise?exercise=${"test"}&user=${"test"}`)
       console.log("should've redirected");
       } : setEditing)}
     <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
-    <View>
       <Text variant="titleLarge">Today's Exercises</Text>
-      <ExerciseGrid/>
-    </View>
+      <List.Section>
+    <ScrollView style={{maxHeight: 400}}>
+          {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.key}`)})}/>)}
+    </ScrollView></List.Section>
     <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
     <View >
       <Text variant="titleLarge">Prior Workouts</Text>
       <List.Section >
-        <List.Accordion style={{borderBottomWidth: 10, borderBottomColor:"#DFDFDF"}}title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
-        <List.Accordion title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
-        <List.Accordion title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
-        <List.Accordion title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
-        <List.Accordion title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
-        <List.Accordion title="06.01.2000">
-          <ExerciseGrid></ExerciseGrid>
-        </List.Accordion>
+        <AnimatedAccordion title="06.01.2000">
+          {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={exerciseToListItem}/>)}
+        </AnimatedAccordion>
       </List.Section>
     </View>
   </ScrollView>);

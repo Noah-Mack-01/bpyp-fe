@@ -1,12 +1,13 @@
-import { DataProvider } from "@/src/providers/exercise-provider";
+import { ExerciseDetailProvider } from "@/src/providers/exercise-detail.provider";
 import { Stack, useLocalSearchParams } from "expo-router";
 
 export default function ExerciseRoute() {
-  let { exercise } = useLocalSearchParams();
-  let id: string = Array.isArray(exercise) && exercise.length > 0 ? exercise[0] : String(exercise);
+  let { user, exercise } = useLocalSearchParams();
+  let exerciseId: string = (Array.isArray(exercise) && exercise.length > 0 ? exercise[0] : exercise) as string;
+  let userId: string = (Array.isArray(user)  && user.length > 0 ? user[0] : user) as string
   return (
-    <DataProvider id={id}>
+    <ExerciseDetailProvider uId={userId} eId={exerciseId}>
         <Stack screenOptions={{ headerTitle:"Exercise View", headerShown: true}}/>
-    </DataProvider>
+    </ExerciseDetailProvider>
   );
 }
