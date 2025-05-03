@@ -19,13 +19,13 @@ export const ExerciseDetailProvider: React.FC<UserByIdProps> = ({ uId, children 
   const [exercise, setExercise] = useState<ExerciseSummary[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`https://stub-backend.com/api/v1/exercise/${uId}/${eId}`);
+        const response = await axios.get(`https://stub-backend.com/api/v1/users/exercises?user=${uId}&past=${5}`);
         setExercise(response.data);
       } catch (err: any) {
         setError(err.message || "An error occurred");
@@ -41,7 +41,7 @@ export const ExerciseDetailProvider: React.FC<UserByIdProps> = ({ uId, children 
   );
 };
 
-export const getExerciseDetail = (): ExerciseSummaryContextType => {
+export const getExerciseSummaryDetail = (): ExerciseSummaryContextType => {
   const context = useContext(ExerciseSummaryContext);
   if (!context) {
     throw new Error("useData must be used within a DataProvider");

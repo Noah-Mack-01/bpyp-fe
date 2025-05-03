@@ -26,7 +26,7 @@ export const ExerciseDetailProvider: React.FC<ExerciseByIdProps> = ({ uId, eId, 
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`https://stub-backend.com/api/v1/exercise/${uId}/${eId}`);
+        const response = await axios.get(`https://stub-backend.com/api/v1/exercise?user=${uId}&exercise=${eId}`);
         setExercise(response.data);
       } catch (err: any) {
         setError(err.message || "An error occurred");
@@ -42,7 +42,7 @@ export const ExerciseDetailProvider: React.FC<ExerciseByIdProps> = ({ uId, eId, 
     setError(null);
     try {
       const method = (!!exercise)? axios.put : axios.post;
-      const response = await method(`https://stub-backend.com/api/v1/exercise/${uId}/${eId}`, exercise, {})
+      const response = await method(`https://stub-backend.com/api/v1/exercise?user=${uId}&exercise=${eId}`, exercise, {})
     } catch (err: any) {
       setError("Invalid PUT on ")
     }
