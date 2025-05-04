@@ -1,11 +1,7 @@
-import { AuthProvider, useAuth } from "@/src/providers/auth.provider";
-import { useRoute } from "@react-navigation/native";
-import { Stack, useRouter } from "expo-router";
-import { ReactNode } from "react";
+import { useAuth } from "@/src/providers/auth.provider";
+import { Redirect, Stack, useRouter } from "expo-router";
 
-export function ProtectedLayout() {
+export default function ProtectedLayout() {
   const authContext = useAuth();
-  const router = useRouter()
-  if (!authContext.isAuthenticated) router.navigate("/login")
-  return <Stack/>
+  return (!authContext.session) ? <Redirect href={"/login"}/> : <Stack />;
 }
