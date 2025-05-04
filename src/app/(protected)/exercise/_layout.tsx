@@ -1,5 +1,5 @@
 import { ExerciseDetailProvider } from "@/src/providers/exercise-detail.provider";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Slot, Stack, useLocalSearchParams } from "expo-router";
 
 export default function ExerciseRoute() {
   let { user, exercise } = useLocalSearchParams();
@@ -7,7 +7,7 @@ export default function ExerciseRoute() {
   let userId: string = (Array.isArray(user)  && user.length > 0 ? user[0] : user) as string
   return (
     <ExerciseDetailProvider uId={userId} eId={exerciseId}>
-        <Stack screenOptions={{ headerTitle:"Exercise View", headerShown: true}}/>
+        <Slot screenOptions={{ headerTitle:"Exercise View", headerShown: true}}/>
     </ExerciseDetailProvider>
   );
 }

@@ -27,8 +27,8 @@ export const ExerciseForm = (props: {
     <Formik
       initialValues={{
         text: props.exercise?.text ?? '',
-        sets: props.exercise?.sets ?? 1,
-        work: props.exercise?.work ?? 10,
+        sets: props.exercise?.sets ?? '',
+        work: props.exercise?.work ?? '',
         workUnit: props.exercise?.workUnit ?? 'reps',
         resistance: props.exercise?.resistance ?? 0,
         resistanceUnits: props.exercise?.resistanceUnits ?? 'pounds',

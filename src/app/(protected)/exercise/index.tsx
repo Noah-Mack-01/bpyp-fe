@@ -13,7 +13,8 @@ export default function TestDir() {
     console.log(showBanner)
   }, [error]);
   return (
-    <View><Banner visible={showBanner} actions={[{label: "OK", onPress: () => setShowBanner(false)}]} children={<Text>{error}</Text>}></Banner>
+    <View>
+      <Banner visible={showBanner} actions={[{label: "OK", onPress: () => setShowBanner(false)}]} children={<Text>{error}</Text>}></Banner>
       <ActivityIndicator animating={!!loading}/>
       <ExerciseForm exercise={exercise??undefined}/>
     </View>);

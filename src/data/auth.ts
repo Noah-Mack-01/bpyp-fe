@@ -10,6 +10,6 @@ export type AuthenticationContext = {
 }
 
 export type Credentials = {
-  email: `${string}@${string}.${'org'|'com'|'net'|'io'|'uk'}`
+  email: string, 
   password: string
 }

@@ -22,7 +22,7 @@ export default function Index() {
     <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
       <Text variant="titleLarge">Today's Exercises</Text>
       <List.Section>
-    <ScrollView style={{maxHeight: 400}}>
+    <ScrollView style={{maxHeight: 300}}>
           {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.key}`)})}/>)}
     </ScrollView></List.Section>
     <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>

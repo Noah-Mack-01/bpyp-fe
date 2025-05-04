@@ -12,7 +12,7 @@ export default function RootLayout() {
       <PaperProvider theme={DefaultTheme}>
         <AuthProvider>
           <Stack screenOptions={{ headerShown: false}}>
-            <Stack.Screen name="login/index"/>
+            <Stack.Screen name="(auth)"/>
             <Stack.Screen name ="(protected)"/>
           </Stack>
         </AuthProvider>
