@@ -1,21 +1,36 @@
 import { ExerciseForm } from "@/src/components/exercise/exercise-form"
-import { getExerciseDetail } from "@/src/providers/exercise-detail.provider"
+import { Exercise } from "@/src/data/exercise"
+import { useExerciseApi } from "@/src/providers/exercise-api.provider"
 import { useRouter } from "expo-router"
+import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks"
 import { useEffect, useState } from "react"
 import { View } from "react-native"
 import { ActivityIndicator, Banner, Text } from "react-native-paper"
 export default function TestDir() {
-  const router = useRouter()
-  const { exercise, loading, error, submit} = getExerciseDetail()
-  const [showBanner, setShowBanner] = useState(!!error);
+  const exerciseApi = useExerciseApi();
+  const [showBanner, setShowBanner] = useState(!!exerciseApi.error);
+  const res = useLocalSearchParams();
+  const { user = "", exercise = "" } = useLocalSearchParams(); // Pull query parameters
+  const [exerciseBody, setExercise] = useState<Exercise | null>(null);
   useEffect(()=>{
-    setShowBanner(!!error)
-    console.log(showBanner)
-  }, [error]);
+    setShowBanner(!!exerciseApi.error) 
+  }, [exerciseApi]);
+
+  useEffect(() => {
+    console.log(res)
+    const fetch = async () => { 
+      const found = await exerciseApi.getExercise(user as string, exercise as string);
+      setExercise(found ?? null);
+      console.log(found)
+      console.log(exerciseBody)
+    };
+    fetch()
+  }, []) // these values should never change.
+
   return (
     <View>
-      <Banner visible={showBanner} actions={[{label: "OK", onPress: () => setShowBanner(false)}]} children={<Text>{error}</Text>}></Banner>
-      <ActivityIndicator animating={!!loading}/>
-      <ExerciseForm exercise={exercise??undefined}/>
+      <Banner visible={showBanner} actions={[{label: "OK", onPress: () => setShowBanner(false)}]} children={<Text>{exerciseApi.error}</Text>}></Banner>
+      <ActivityIndicator animating={!!exerciseApi.loading}/>
+      <ExerciseForm exercise={exerciseBody ?? undefined}/>
     </View>);
 }

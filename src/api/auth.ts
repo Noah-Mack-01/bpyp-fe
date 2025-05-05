@@ -6,34 +6,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert, AppState, Platform } from 'react-native';
 import { Credentials } from '../data/auth';
   
-const apiClient = axios.create({
-  baseURL: CONFIG.API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 class SupabaseStorage {
   async getItem(key: string) {
-    if (Platform.OS === "web") {
-      if (typeof localStorage === "undefined") {
-        return null;
-      }
-      return localStorage.getItem(key);
-    }
-    return AsyncStorage.getItem(key);
+    let isWeb = Platform.OS == "web";
+    if (isWeb && typeof localStorage == "undefined") return null;
+    let storage = (isWeb) ? localStorage : AsyncStorage;
+    return storage.getItem(key);
   }
   async removeItem(key: string) {
-    if (Platform.OS === "web") {
-      return localStorage.removeItem(key);
-    }
-    return AsyncStorage.removeItem(key);
+    let isWeb = Platform.OS == "web";
+    if (isWeb && typeof localStorage == "undefined") return;
+    let storage = (isWeb) ? localStorage : AsyncStorage;
+    storage.removeItem(key);
   }
+
   async setItem(key: string, value: string) {
-    if (Platform.OS === "web") {
-      return localStorage.setItem(key, value);
-    }
-    return AsyncStorage.setItem(key, value);
+    let isWeb = Platform.OS == "web";
+    if (isWeb && typeof localStorage == "undefined") return;
+    let storage = (isWeb) ? localStorage : AsyncStorage;
+    storage.setItem(key, value);
   }
 }
 

@@ -22,6 +22,13 @@ export type ExerciseSummary = {
   type?: ExerciseType 
 }
 
+export type ExerciseContext = {
+  loading: boolean
+  error: any
+  getExercise: (userId: string, exerciseId: string)=>Promise<Exercise>|undefined
+  createNewExercise: (userId: string, exercise: Exercise) => Promise<boolean>
+}
+
 export function exerciseToListItem(ex: Exercise): ListProperties {
   return {title: ex.exercise ?? 'N/A', description: ex.summary, icon:iconMap[ex.type ?? ''], tags:ex.attributes}
 }

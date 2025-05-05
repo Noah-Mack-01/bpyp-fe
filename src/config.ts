@@ -1,7 +1,7 @@
-import { BPYP_SUPABASE_URL, BPYP_SUPABASE_ANON_KEY } from '@env';
+import { BPYP_SUPABASE_URL, BPYP_SUPABASE_ANON_KEY, BACKEND_URL } from '@env';
 
 export const CONFIG = {
-  API_URL: "http://localhost:8080",
+  API_URL: BACKEND_URL,
   SUPABASE_URL: BPYP_SUPABASE_URL as string,
   SUPABASE_ANON_KEY: BPYP_SUPABASE_ANON_KEY as string
 } as any;

@@ -37,6 +37,7 @@ export const ExerciseForm = (props: {
         exercise: props.exercise?.exercise ?? "Seated Curl"
       } as Exercise}
       validationSchema={ExerciseSchema}
+      enableReinitialize={true}
       onSubmit={(values, actions) => {
         if (props.submit) {
           props.submit(values).then(()=>{

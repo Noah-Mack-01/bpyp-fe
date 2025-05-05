@@ -1,11 +1,16 @@
 import { useAuth } from "@/src/providers/auth.provider";
 import { Redirect, Slot, Stack, useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Appbar } from "react-native-paper";
 
 export default function ProtectedLayout() {
   const authContext = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+      if (!!authContext.session) router.push({pathname: "/", params: { uId: authContext.session.user.id }});
+  }, [authContext])
+
   return (!authContext.session) ? <Redirect href={"/login"}/> : (
     <>
       {/* Custom Appbar */}

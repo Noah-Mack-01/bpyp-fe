@@ -13,15 +13,15 @@ export default function Index() {
   const scale = useWindowDimensions();
   const theme: ThemeProp = useTheme();
   return (
-  <ScrollView style={{width: "98%", marginHorizontal: "1%", paddingTop:"1%"}}>
+  <ScrollView style={{width: "99%", marginLeft: "1%", paddingRight:"3%",paddingTop:"1%"}}>
     {editing ? <ExerciseForm back={()=>{setEditing(false)}}/> : 
     smartInput(text, setText, theme, scale.width < scale.height ? ()=>{
       router.push(`/exercise?exercise=${"test"}&user=${"test"}`)
       console.log("should've redirected");
       } : setEditing)}
-    <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
-      <Text variant="titleLarge">Today's Exercises</Text>
-      <List.Section>
+    <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}/>
+    <Text variant="titleLarge">Today's Exercises</Text>
+    <List.Section>
     <ScrollView style={{maxHeight: 300}}>
           {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.key}`)})}/>)}
     </ScrollView></List.Section>
