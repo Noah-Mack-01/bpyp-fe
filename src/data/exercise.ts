@@ -16,7 +16,7 @@ export type Exercise = ExerciseSummary & {
 }
 
 export type ExerciseSummary = {
-  key: string,
+  id: string,
   exercise?: string,
   summary?: string,
   type?: ExerciseType 
@@ -25,8 +25,9 @@ export type ExerciseSummary = {
 export type ExerciseContext = {
   loading: boolean
   error: any
-  getExercise: (userId: string, exerciseId: string)=>Promise<Exercise>|undefined
+  getExercise: (userId: string, exerciseId: string) => Promise<Exercise>|undefined
   createNewExercise: (userId: string, exercise: Exercise) => Promise<boolean>
+  getStructure: (message: string) => Promise<any>
 }
 
 export function exerciseToListItem(ex: Exercise): ListProperties {
@@ -40,7 +41,7 @@ const iconMap: {[key: string]:string} = {
 export const SAMPLE: Exercise[] = [
   // Strength Training (Anaerobic)
   {
-    key: "1a", 
+    id: "1a", 
     text: "5x5 Bench Press, 185lbs", 
     summary: "5 sets of 5 reps with 185lbs", 
     exercise: "Bench Press", 
@@ -53,7 +54,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 86400000) // yesterday
   },
   { 
-    key: "2bd0",
+    id: "2bd0",
     text: "3x12 Squats, 225lbs", 
     summary: "3 sets of 12 reps with 225lbs",
     exercise: "Squats", 
@@ -66,7 +67,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 172800000) // 2 days ago
   },
   { 
-    key: "11111",
+    id: "11111",
     text: "4x8 Pull-ups", 
     summary: "4 sets of 8 reps with bodyweight",
     exercise: "Pull-ups", 
@@ -79,7 +80,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 259200000) // 3 days ago
   },
   { 
-    key: "AAAAAAA",
+    id: "AAAAAAA",
     text: "3x15 Kettlebell Swings, 35kg", 
     summary: "3 sets of 15 reps with 35kg kettlebell",
     exercise: "Kettlebell Swings", 
@@ -92,7 +93,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date()
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "5x5 Overhead Press, 95lbs", 
     summary: "5 sets of 5 reps with 95lbs",
     exercise: "Overhead Press", 
@@ -107,7 +108,7 @@ export const SAMPLE: Exercise[] = [
   
   // Cardio (Aerobic)
   { 
-    key: "testkey",
+    id: "testkey",
     text: "45 Minute Cycling, 15 miles", 
     summary: "45 minutes, covered 15 miles",
     exercise: "Cycling", 
@@ -119,7 +120,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 86400000) // yesterday
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "30 Minute Treadmill, incline 3.0", 
     summary: "30 minutes at incline 3.0",
     exercise: "Treadmill", 
@@ -131,7 +132,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date()
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "Swimming, 20 laps", 
     summary: "20 laps in Olympic pool",
     exercise: "Swimming", 
@@ -141,7 +142,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 345600000) // 4 days ago
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "HIIT Session, 20 minutes", 
     summary: "20 minute HIIT workout, 40s on/20s off",
     exercise: "HIIT", 
@@ -153,7 +154,7 @@ export const SAMPLE: Exercise[] = [
   
   // Mixed or Specialized
   { 
-    key: "testkey",
+    id: "testkey",
     text: "4x10 Mountain Climbers", 
     summary: "4 sets of 10 reps each side",
     exercise: "Mountain Climbers", 
@@ -164,7 +165,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 86400000) // yesterday
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "3 Rounds Circuit Training", 
     summary: "3 rounds of full-body circuit",
     exercise: "Circuit Training", 
@@ -174,7 +175,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 518400000) // 6 days ago
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "3x8 Front Squats, 135lbs", 
     summary: "3 sets of 8 reps with 135lbs",
     exercise: "Front Squats", 
@@ -188,7 +189,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date()
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "5x10 Medicine Ball Slams, 15kg", 
     summary: "5 sets of 10 reps with 15kg ball",
     exercise: "Medicine Ball Slams", 
@@ -201,7 +202,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 259200000) // 3 days ago
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "Yoga Session, 60 minutes", 
     summary: "60 minute vinyasa flow",
     exercise: "Yoga", 
@@ -214,7 +215,7 @@ export const SAMPLE: Exercise[] = [
   
   // With varied attributes
   { 
-    key: "testkey",
+    id: "testkey",
     text: "5x5 Sumo Deadlifts, 265lbs", 
     summary: "5 sets of 5 reps with 265lbs, sumo stance",
     exercise: "Deadlifts", 
@@ -228,7 +229,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date()
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "3x12 Incline Dumbbell Press, 40lbs each", 
     summary: "3 sets of 12 reps with 40lb dumbbells",
     exercise: "Dumbbell Press", 
@@ -242,7 +243,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 172800000) // 2 days ago
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "4x8 Close-Grip Bench Press, 155lbs", 
     summary: "4 sets of 8 reps with 155lbs, close grip",
     exercise: "Bench Press", 
@@ -256,7 +257,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date(Date.now() - 345600000) // 4 days ago
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "Trail Running, 4 miles, hilly terrain", 
     summary: "4 miles on hilly forest trail",
     exercise: "Running", 
@@ -267,7 +268,7 @@ export const SAMPLE: Exercise[] = [
     timeStamp: new Date()
   },
   { 
-    key: "testkey",
+    id: "testkey",
     text: "2x20 Standing Calf Raises, 100kg", 
     summary: "2 sets of 20 reps with 100kg",
     exercise: "Calf Raises", 

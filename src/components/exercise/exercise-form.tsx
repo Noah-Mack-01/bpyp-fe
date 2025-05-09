@@ -1,11 +1,10 @@
 import { Exercise } from "@/src/data/exercise";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { DimensionValue, useWindowDimensions, View } from "react-native";
+import { useWindowDimensions, View } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { PickListOption } from "@/src/data/inputs";
 import { RowToColumnView } from "../structural/views";
-import { FixedWidthInput, InputPickListCombo, } from "../shared/inputs";
-import { Form, Formik } from "formik";
+import { InputPickListCombo, } from "../shared/inputs";
+import { Formik } from "formik";
 import * as Yup from 'yup';
 
 // Validation schema - add this for form validation

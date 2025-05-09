@@ -29,7 +29,8 @@ export const ExerciseProvider = ({ children }: any) => {
     loading: isLoading,
     error: error,
     getExercise: methodWrapper(exerciseAPI.getExercise),
-    createNewExercise: methodWrapper(exerciseAPI.createNewExercise)
+    createNewExercise: methodWrapper(exerciseAPI.createNewExercise),
+    getStructure: methodWrapper(exerciseAPI.getStructuredExercise)
   }
 
   return (

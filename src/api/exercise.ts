@@ -34,8 +34,19 @@ export const exerciseAPI  = {
       console.error(error);
       return false;
     }
+  },
+  getStructuredExercise: async (message: string) => {
+    let res: any;
+    try {
+      res = await apiClient.get("/v1/processor", { params: { message: message }});
+    } catch (err) {
+      console.error(err)
+    } finally {
+      return res;
+    }
   }
 }
+
 export async function getExerciseSummary(userId: string) {
   let res: any;
   try {

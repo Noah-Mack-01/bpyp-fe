@@ -6,56 +6,59 @@ import { useRouter } from "expo-router";
 import { ExerciseForm } from "../../components/exercise/exercise-form";
 import AnimatedAccordion, { ListChild } from "../../components/shared/lists";
 import { exerciseToListItem, SAMPLE } from "../../data/exercise";
+import { useExerciseApi } from "@/src/providers/exercise-api.provider";
 export default function Index() {
   const[text, setText] = useState("");
   const[editing, setEditing]=useState(false);
   const router = useRouter()
+  const apiContext = useExerciseApi()
   const scale = useWindowDimensions();
   const theme: ThemeProp = useTheme();
-  return (
-  <ScrollView style={{width: "99%", marginLeft: "1%", paddingRight:"3%",paddingTop:"1%"}}>
-    {editing ? <ExerciseForm back={()=>{setEditing(false)}}/> : 
-    smartInput(text, setText, theme, scale.width < scale.height ? ()=>{
-      router.push(`/exercise?exercise=${"test"}&user=${"test"}`)
-      console.log("should've redirected");
-      } : setEditing)}
-    <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}/>
-    <Text variant="titleLarge">Today's Exercises</Text>
-    <List.Section>
-    <ScrollView style={{maxHeight: 300}}>
-          {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.key}`)})}/>)}
-    </ScrollView></List.Section>
-    <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
-    <View >
-      <Text variant="titleLarge">Prior Workouts</Text>
-      <List.Section >
-        <AnimatedAccordion title="06.01.2000">
-          {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={exerciseToListItem}/>)}
-        </AnimatedAccordion>
-      </List.Section>
-    </View>
-  </ScrollView>);
-}
-function openEdit(func: (bool: boolean)=>void): ReactNode { return (
-  <TouchableOpacity onPress={() => {
-    func(true);
-  }} style={{flexDirection:"row", alignItems:"flex-end"}}>
-    <Text variant="titleMedium">manual entry </Text>
-    <View><Icon source="menu-right" size={25}/></View>
-  </TouchableOpacity>
-); }
+  const openEdit = (func: (bool: boolean)=>void): ReactNode => { return (
+    <TouchableOpacity onPress={() => {
+      func(true);
+    }} style={{flexDirection:"row", alignItems:"flex-end"}}>
+      <Text variant="titleMedium">manual entry </Text>
+      <View><Icon source="menu-right" size={25}/></View>
+    </TouchableOpacity>
+  ); }
 
-function smartInput(text: string, setText: (str: string)=>void, theme: ThemeProp, setEditing: (bool: boolean)=>void): ReactNode { 
+  const smartInput = (text: string, theme: ThemeProp): ReactNode => { 
+    return (
+      <View>
+        <TextInput
+          mode="outlined"
+          onChangeText={text => setText(text)}
+          placeholder='e.g. "5 by 10 weighted dips at 50lbs"'
+          value={text}
+          label="Enter exercise"
+          style={{width: "100%" }}
+          right={<TextInput.Icon icon="arrow-right-drop-circle" onPress={()=>{apiContext.getStructure(text)}} size={40} color={theme.colors?.primary}/>}
+        />
+        {openEdit(scale.width < scale.height ? (b: boolean) => router.push(`/exercise?user={}`) : setEditing)}
+      </View>
+    ); 
+  }
+
   return (
-    <View >
-      <TextInput
-        mode="outlined"
-        onChangeText={text => setText(text)}
-        placeholder='e.g. "5 by 10 weighted dips at 50lbs"'
-        value={text}
-        label="Enter exercise"
-        style={{width: "100%" }}
-        right={<TextInput.Icon icon="arrow-right-drop-circle" onPress={()=>{}} size={40} color={theme.colors?.primary}/>}
-      />
-      {openEdit(setEditing)}
-    </View>); }
+    <ScrollView style={{width: "99%", marginLeft: "1%", paddingRight:"3%",paddingTop:"1%"}}>
+      {editing ? <ExerciseForm back={()=>{setEditing(false)}}/> : 
+      smartInput(text, theme)} 
+      <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}/>
+      <Text variant="titleLarge">Today's Exercises</Text>
+      <List.Section>
+      <ScrollView style={{maxHeight: 300}}>
+            {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.id}`)})}/>)}
+      </ScrollView></List.Section>
+      <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
+      <View >
+        <Text variant="titleLarge">Prior Workouts</Text>
+        <List.Section >
+          <AnimatedAccordion title="06.01.2000">
+            {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={exerciseToListItem}/>)}
+          </AnimatedAccordion>
+        </List.Section>
+      </View>
+    </ScrollView>
+    );
+}

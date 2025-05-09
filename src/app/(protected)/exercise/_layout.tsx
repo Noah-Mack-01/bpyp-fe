@@ -3,8 +3,6 @@ import { Slot, Stack, useLocalSearchParams } from "expo-router";
 
 export default function ExerciseRoute() {
   return (
-    <ExerciseProvider>
         <Slot screenOptions={{ headerTitle:"Exercise View", headerShown: true}}/>
-    </ExerciseProvider>
   );
 }
