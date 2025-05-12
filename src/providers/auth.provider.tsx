@@ -2,7 +2,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store'; // For Expo apps
 // OR import { Keychain } from 'react-native-keychain'; // For non-Expo apps
-import authAPI, { supabase } from '../api/auth';
+import authAPI, { supabase } from '../api/supabase';
 import { AuthenticationContext } from '../data/auth';
 import { AuthError, Session } from '@supabase/supabase-js';
 import { Alert } from 'react-native';
@@ -19,8 +19,8 @@ export const AuthProvider = ({ children }: any) => {
     setError(null);
     try { !!obj ? func(obj) : func(); }
     catch (err) {
-      setError(err);
-      console.error(`${func.name} failed`, err);
+      setError(String(err));
+      console.error(`${func?.name ?? ''} failed`, err);
     } finally {
       setIsLoading(false);
     }

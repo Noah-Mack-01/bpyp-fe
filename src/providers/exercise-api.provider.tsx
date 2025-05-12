@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { Alert } from 'react-native';
 import { ExerciseContext } from '../data/exercise';
 import { exerciseAPI } from '../api/exercise';
+import { useAuth } from './auth.provider';
+import { supabaseAPI } from '../api/supabase';
 
 const ExerciseApiContext = createContext(null as  ExerciseContext | null);
 
@@ -15,7 +17,7 @@ export const ExerciseProvider = ({ children }: any) => {
       setIsLoading(true);
       setError(null);
       try {
-        return await func(...obj);
+        return await func(...obj??[]);
       } catch (err) {
         setError(err);
         console.error(`${func.name} failed`, err);
@@ -30,7 +32,8 @@ export const ExerciseProvider = ({ children }: any) => {
     error: error,
     getExercise: methodWrapper(exerciseAPI.getExercise),
     createNewExercise: methodWrapper(exerciseAPI.createNewExercise),
-    getStructure: methodWrapper(exerciseAPI.getStructuredExercise)
+    getStructure: methodWrapper(exerciseAPI.getStructuredExercise),
+    getAllExercises: methodWrapper(supabaseAPI.getSummary)
   }
 
   return (
@@ -47,4 +50,4 @@ export const useExerciseApi = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}

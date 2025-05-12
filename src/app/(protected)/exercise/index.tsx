@@ -1,5 +1,6 @@
 import { ExerciseForm } from "@/src/components/exercise/exercise-form"
 import { Exercise } from "@/src/data/exercise"
+import { useAuth } from "@/src/providers/auth.provider"
 import { useExerciseApi } from "@/src/providers/exercise-api.provider"
 import { useRouter } from "expo-router"
 import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks"
@@ -10,8 +11,9 @@ export default function TestDir() {
   const exerciseApi = useExerciseApi();
   const [showBanner, setShowBanner] = useState(!!exerciseApi.error);
   const res = useLocalSearchParams();
-  const { user = "", exercise = "" } = useLocalSearchParams(); // Pull query parameters
+  const { exercise = "" } = useLocalSearchParams(); // Pull query parameters
   const [exerciseBody, setExercise] = useState<Exercise | null>(null);
+  const authContext = useAuth()
   useEffect(()=>{
     setShowBanner(!!exerciseApi.error) 
   }, [exerciseApi]);
@@ -19,7 +21,7 @@ export default function TestDir() {
   useEffect(() => {
     console.log(res)
     const fetch = async () => { 
-      const found = await exerciseApi.getExercise(user as string, exercise as string);
+      const found = await exerciseApi.getExercise(exercise as string);
       setExercise(found ?? null);
       console.log(found)
       console.log(exerciseBody)

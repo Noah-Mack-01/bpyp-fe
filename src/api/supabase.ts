@@ -47,9 +47,7 @@ AppState.addEventListener('change', (state) => {
   else supabase.auth.stopAutoRefresh() 
 });
 
-
-
-const authAPI = {
+export const authAPI = {
   login: async (credentials?: Credentials) => {
     if (!credentials) {
       Alert.alert('Login failed', 'Credentials were null')
@@ -83,4 +81,15 @@ const authAPI = {
   // Other auth-related API calls
 };
 
-export default authAPI;
+export const supabaseAPI = {
+  getSummary: async () => {
+    //@ts-ignore
+    try { 
+      const query = supabase.from("exercises").select("id, exercise:exercise_name, summary, type, attributes")
+      const { data } = await query;
+      return data;
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}

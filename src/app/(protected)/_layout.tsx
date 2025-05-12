@@ -9,7 +9,7 @@ export default function ProtectedLayout() {
   const router = useRouter();
 
   useEffect(() => {
-      if (!!authContext.session) router.push({pathname: "/", params: { uId: authContext.session.user.id }});
+      if (!!authContext.session) router.push({pathname: "/"});
   }, [authContext])
 
   return (!authContext.session) ? <Redirect href={"/login"}/> : (

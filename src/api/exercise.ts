@@ -2,6 +2,7 @@ import axios from "axios";
 import { CONFIG } from "../config";
 import { Alert } from "react-native";
 import { Exercise } from "../data/exercise";
+import { supabase } from './supabase';
 
 const apiClient = axios.create({
   baseURL: CONFIG.API_URL,
@@ -9,12 +10,19 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
-export const exerciseAPI  = {
-  getExercise: async (userId: string, exerciseId: string) => {
-    console.log(userId, exerciseId);
+
+apiClient.interceptors.request.use(async (config) => {
+  const { data } = await supabase.auth.getSession()
+  config.headers.Authorization = `Bearer ${data.session?.access_token ?? ''}`;
+  return config;
+})
+
+export const exerciseAPI = ({
+  getExercise: async (exerciseId: string) => {
+    console.log(exerciseId);
     try {
     let result = await apiClient.get("/v1/exercises", { 
-      params: {uid: userId, eid: exerciseId},
+      params: { eid: exerciseId},
     });
     console.log(result)
     return result.data;
@@ -25,9 +33,9 @@ export const exerciseAPI  = {
       return undefined;
     }
   },
-  createNewExercise: async (userId: string, exercise: Exercise) => {
+  createNewExercise: async (exercise: Exercise) => {
     try {
-      let result = await apiClient.post("/v1/exercises", exercise, { params: {uid: userId} });
+      let result = await apiClient.post("/v1/exercises", exercise);
       return (result.status / 100 >= 200 && result.status / 100 < 300);
     } catch (error) {
       Alert.alert("Could not create item")
@@ -44,17 +52,5 @@ export const exerciseAPI  = {
     } finally {
       return res;
     }
-  }
-}
-
-export async function getExerciseSummary(userId: string) {
-  let res: any;
-  try {
-    res = await apiClient.get("/v1/exercises", {params: { uid: userId}})
-  } catch (err) {
-    console.error(err);
-  } finally {
-    console.log(res);
-    return res;
-  }
-}
+  },
+});

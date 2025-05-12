@@ -1,11 +1,11 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ScrollView, Touchable, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { TextInput, Text, Appbar, useTheme, Icon, List, Divider} from "react-native-paper"
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import { useRouter } from "expo-router";
 import { ExerciseForm } from "../../components/exercise/exercise-form";
 import AnimatedAccordion, { ListChild } from "../../components/shared/lists";
-import { exerciseToListItem, SAMPLE } from "../../data/exercise";
+import { Exercise, exerciseToListItem } from "../../data/exercise";
 import { useExerciseApi } from "@/src/providers/exercise-api.provider";
 export default function Index() {
   const[text, setText] = useState("");
@@ -14,6 +14,20 @@ export default function Index() {
   const apiContext = useExerciseApi()
   const scale = useWindowDimensions();
   const theme: ThemeProp = useTheme();
+
+
+  const [rows, setRows] = useState([] as Exercise[]);
+
+  useEffect(()=>{
+    let func = async () => {
+      let res = await apiContext.getAllExercises();
+      setRows(res ?? []);
+    }
+    func()
+  }, [])
+
+
+  
   const openEdit = (func: (bool: boolean)=>void): ReactNode => { return (
     <TouchableOpacity onPress={() => {
       func(true);
@@ -33,9 +47,12 @@ export default function Index() {
           value={text}
           label="Enter exercise"
           style={{width: "100%" }}
-          right={<TextInput.Icon icon="arrow-right-drop-circle" onPress={()=>{apiContext.getStructure(text)}} size={40} color={theme.colors?.primary}/>}
+          right={<TextInput.Icon icon="arrow-right-drop-circle" onPress={()=>{
+            apiContext.getStructure(text);
+            setText("")
+          }} size={40} color={theme.colors?.primary}/>}
         />
-        {openEdit(scale.width < scale.height ? (b: boolean) => router.push(`/exercise?user={}`) : setEditing)}
+        {openEdit(scale.width < scale.height ? (b: boolean) => router.push(`/exercise?`) : setEditing)}
       </View>
     ); 
   }
@@ -47,18 +64,11 @@ export default function Index() {
       <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}/>
       <Text variant="titleLarge">Today's Exercises</Text>
       <List.Section>
-      <ScrollView style={{maxHeight: 300}}>
-            {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.id}`)})}/>)}
-      </ScrollView></List.Section>
+        <ScrollView style={{maxHeight: 300}}>
+          {rows.map((ex, key) => <ListChild key={key} object={ex} func={(item)=>({...exerciseToListItem(item), onClick: () => router.push(`/exercise?user=test&exercise=${ex.id}`)})}/>)}
+        </ScrollView>
+      </List.Section>
       <Divider style={{marginTop: 20, marginBottom: 30}} bold={true}></Divider>
-      <View >
-        <Text variant="titleLarge">Prior Workouts</Text>
-        <List.Section >
-          <AnimatedAccordion title="06.01.2000">
-            {SAMPLE.map((ex, key) => <ListChild key={key} object={ex} func={exerciseToListItem}/>)}
-          </AnimatedAccordion>
-        </List.Section>
-      </View>
     </ScrollView>
     );
 }
